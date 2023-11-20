@@ -1,0 +1,23 @@
+import requests
+from bs4 import BeautifulSoup
+
+def scrape_books(url):
+    response = requests.get(url)
+    
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.content, 'html.parser')
+        
+        books = soup.find_all("article")
+
+        for book in books:
+            title = book.h3.a["title"]
+            rating = book.p["class"][1]
+            
+            print(f"Title: {title}, Rating: {rating}")
+
+    else:
+        print(f"Failed to retrieve the page. Status code: {response.status_code}")
+
+if __name__ == "__main__":
+    url = "https://books.toscrape.com/"
+    scrape_books(url)
